@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>blue_car_model</name>
+  <version>0.0.0</version>
+  <description>Gazebo blue car package</description>
+  <maintainer email="rbrown53@huskers.unl">Ryan Brown</maintainer>
+  <license>TODO</license>
+   <build_depend>roscpp</build_depend>
+  <exec_depend>roscpp</exec_depend>
+   <build_depend>std_msgs</build_depend>
+   <exec_depend>std_msgs</exec_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_depend>ackermann_msgs</build_depend>
+  <exec_depend>ackermann_msgs</exec_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+  <export>
+  </export>
+</package>

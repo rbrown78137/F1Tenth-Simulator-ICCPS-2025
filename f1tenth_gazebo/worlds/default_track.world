@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="default">
+    <scene>
+      <ambient>1 1 1 1</ambient>
+      <background>0.81176470588 0.81176470588 0.81176470588 1</background>
+      <shadows>false</shadows>
+    </scene>
+    <light type="directional" name="some_light">
+      <ambient>1 1 1 1</ambient>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>1 1 1 1</specular>
+      <emissive>1 1 1 1</emissive>
+      <direction>-1 -1 -1</direction>
+    </light>
+    <include>
+      <uri>model://f1tenth_model</uri>
+    </include>
+    <include>
+      <pose>2 0 0 0 0 0</pose>
+      <uri>model://red_car_model</uri>
+    </include>
+     <include>
+      <pose>0 0 0 0 0 0</pose>
+      <uri>model://f1tenth_track_model</uri>
+    </include>
+    <plugin name="collision_sample" filename="libcollision_sample.so">
+    </plugin>
+    <!-- <plugin name="track_publisher" filename="libtrack_plugin.so">
+    </plugin> -->
+    <!-- <plugin name="world_controls" filename="libworld_controls_plugin.so">
+    </plugin> -->
+    <!--  the max step size is set to 0.001 by default. -->
+<!--  When increasing it, the simulation quality may suffer. -->
+<!--  this factor actually is computed by multiplying the other two -->
+    <physics name='default_physics' default='0' type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>10</real_time_factor>
+      <real_time_update_rate>10000</real_time_update_rate>
+    </physics>
+  </world>
+</sdf>

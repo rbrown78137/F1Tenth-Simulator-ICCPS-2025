@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>f1tenth_semantic_segmentation</name>
+  <version>0.0.0</version>
+  <description>Package to create semantic segmentation images within the simulator</description>
+  <maintainer email="ryan@todo.todo">ryan</maintainer>
+  <license>TODO</license>
+ <build_depend>roscpp</build_depend>
+  <exec_depend>roscpp</exec_depend>
+    <build_depend>rospy</build_depend>
+  <exec_depend>rospy</exec_depend>
+  <build_depend>std_msgs</build_depend>
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <build_depend>cv_bridge</build_depend>
+  <exec_depend>image_transport</exec_depend>
+  <export>
+  </export>
+</package>
