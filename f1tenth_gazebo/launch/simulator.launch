@@ -1,19 +1,22 @@
 <launch>
+  <arg name="simulation_example" default="-1" />
+  <arg name="use_gui" default="false" />
   <param name="/track_number" type="int" value="2"/>
   <!-- 2 = medium complexity simulator track -->
   <!-- 3 = complex simulator track -->
   <!-- 5 = old track -->
   <!-- 6 = pixel perfect new track -->
   <!-- 7 = unseen train set -->
-
+    <param name="simulation_example" value="$(arg simulation_example)" />
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find f1tenth_gazebo)/worlds/default_track.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
     <arg name="paused" value="false"/>
     <arg name="use_sim_time" value="true"/>
-    <arg name="gui" value="false"/>
+    <arg name="gui" default="false" />
     <arg name="recording" value="false"/>
     <arg name="debug" value="false"/>
     <arg name="verbose" value="true"/>
+    <param name="simulation_example" value="$(arg simulation_example)" />
   </include>
 
   <!-- Nodes to enable Semantic Segmentation Cameras -->

@@ -5,6 +5,8 @@
 #include <gazebo/msgs/msgs.hh>
 #include <random>
 #include <chrono>
+#include <ros/ros.h>
+#include <ros/param.h>
 
 std::string global_variable = "";
 gazebo::physics::WorldPtr global_world_ptr;
@@ -38,6 +40,8 @@ bool SIMULATION_OVER = false;
 float last_time_start = 0;
 auto start = std::chrono::high_resolution_clock::now();
 auto end = std::chrono::high_resolution_clock::now();
+int collision_sample = -1;
+    
 namespace gazebo
 {
 void generate_new_poses();
@@ -63,13 +67,27 @@ std::string red_car_collision_array[] = {
 void generate_new_poses(){
   float f1tenth_car_x_mean = 0; float f1tenth_car_x_std = 0;
   float f1tenth_car_y_mean = 0; float f1tenth_car_y_std = 0;
-  float f1tenth_car_velocity_mean = 1; float f1tenth_car_velocity_std = 0;
+  float f1tenth_car_velocity_mean = 0; float f1tenth_car_velocity_std = 0;
   float f1tenth_car_steering_angle_mean = 0; float f1tenth_car_steering_angle_std = 0;
 
-  float red_car_x_mean = 2+ 0.540363; float red_car_x_std = 0;
-  float red_car_y_mean = 0.0; float red_car_y_std = 0.4;
+  float red_car_x_mean = 0; float red_car_x_std = 0;
+  float red_car_y_mean = 0.0; float red_car_y_std = 0;
   float red_car_velocity_mean = 0; float red_car_velocity_std = 0;
   float red_car_steering_angle_mean = 0; float red_car_steering_angle_std = 0;
+  
+  if(collision_sample == 1){
+    // X AND Y ARE FLOPPED IN THIS EXAMPLE
+    f1tenth_car_velocity_mean = 1;
+    red_car_x_mean = 4 + 0.540363;
+    red_car_x_std = 0.3;
+  }
+  if(collision_sample == 2){
+    red_car_x_mean = 2 + 0.540363;
+    f1tenth_car_velocity_mean = 1;
+    red_car_y_mean = 3 * 0.298078;
+    red_car_y_std = 0.298078;
+
+  }
   // float f1tenth_car_x_mean = 0; float f1tenth_car_x_std = 0;
   // float f1tenth_car_y_mean = 0; float f1tenth_car_y_std = 0;
   // float f1tenth_car_velocity_mean = 1; float f1tenth_car_velocity_std = 0;
@@ -226,38 +244,46 @@ class CollisionSample : public WorldPlugin
     // public: static physics::WorldPtr world;
     public: void Load(physics::WorldPtr parent, sdf::ElementPtr /*_sdf*/)
     {
-        std::cout<<"Loading simulation...";
-        std::cout<<std::endl;
-        physics::WorldPtr world_ptr = parent;
-        global_variable = parent->Name();
-        global_world_ptr = world_ptr;
-        // CollisionSample::world = parent;
-        f1tenth_model = world_ptr->ModelByName("f1tenth_car");
-        red_car_model = world_ptr->ModelByName("red_car");
-        generate_new_poses();
-        start = std::chrono::high_resolution_clock::now();
-        // ignition::math::Pose3d f1tenth_pose;
-        // f1tenth_pose.SetX(f1tenth_car_x);
-        // f1tenth_pose.SetY(f1tenth_car_y);
-        // f1tenth_pose.SetZ(f1tenth_car_z);
-        // ignition::math::Pose3d red_car_pose;
-        // red_car_pose.SetX(red_car_x);
-        // red_car_pose.SetY(red_car_y);
-        // red_car_pose.SetZ(red_car_z);
-        // f1tenth_model->SetWorldPose(f1tenth_pose);
-        // red_car_model->SetWorldPose(red_car_pose);
-        this->node = transport::NodePtr(new transport::Node());
-        this->node->Init();
-        this->sub_contact = this->node->Subscribe("/car_contact",contact_callback);
-        this->sub_pose = this->node->Subscribe("/gazebo/default/pose/info",pose_callback);
-        if (this->sub_contact)
-        {
-        std::cout << "Failed to subscribe to [" << "/car_contact" << "]\n"<<std::endl;
-        }
-        if (this->sub_contact)
-        {
-        std::cout << " subscribed to [" << "/car_contact" << "]\n"<<std::endl;
-        }
+      if (!ros::isInitialized()) {
+        int argc = 0;
+        char **argv = nullptr;
+        ros::init(argc, argv, "collision_sample_plugin", ros::init_options::NoSigintHandler);
+      }
+      ros::NodeHandle nh;
+      nh.param("simulation_example", collision_sample, 1); 
+      std::cout<<collision_sample<<std::endl;
+      std::cout<<"Loading simulation...";
+      std::cout<<std::endl;
+      physics::WorldPtr world_ptr = parent;
+      global_variable = parent->Name();
+      global_world_ptr = world_ptr;
+      // CollisionSample::world = parent;
+      f1tenth_model = world_ptr->ModelByName("f1tenth_car");
+      red_car_model = world_ptr->ModelByName("red_car");
+      generate_new_poses();
+      start = std::chrono::high_resolution_clock::now();
+      // ignition::math::Pose3d f1tenth_pose;
+      // f1tenth_pose.SetX(f1tenth_car_x);
+      // f1tenth_pose.SetY(f1tenth_car_y);
+      // f1tenth_pose.SetZ(f1tenth_car_z);
+      // ignition::math::Pose3d red_car_pose;
+      // red_car_pose.SetX(red_car_x);
+      // red_car_pose.SetY(red_car_y);
+      // red_car_pose.SetZ(red_car_z);
+      // f1tenth_model->SetWorldPose(f1tenth_pose);
+      // red_car_model->SetWorldPose(red_car_pose);
+      this->node = transport::NodePtr(new transport::Node());
+      this->node->Init();
+      this->sub_contact = this->node->Subscribe("/car_contact",contact_callback);
+      this->sub_pose = this->node->Subscribe("/gazebo/default/pose/info",pose_callback);
+      if (this->sub_contact)
+      {
+      std::cout << "Failed to subscribe to [" << "/car_contact" << "]\n"<<std::endl;
+      }
+      if (this->sub_contact)
+      {
+      std::cout << " subscribed to [" << "/car_contact" << "]\n"<<std::endl;
+      }
     }
 };
 
