@@ -11,4 +11,6 @@ roslaunch f1tenth_gazebo simulator.launch simulation_example:=2
 Make sure add the package to the gazebo model path such as the following example below
 export GAZEBO_MODEL_PATH=/home/catkin_ws/src/F1Tenth-Simulator-ICCPS-2025
 
-The simulator has GUI visualization disabled by default to improve runtime performance. To change this, set the GUI arguement value in simulator.launch to true.
+The simulator has GUI visualization disabled by default to improve runtime performance. To change this, set the GUI argument value in simulator.launch to true.
+
+See the attached docker file for any issues related to installation.
