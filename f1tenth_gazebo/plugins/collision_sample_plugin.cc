@@ -213,13 +213,13 @@ void SetVelocity(double velocity,gazebo::physics::ModelPtr model,std::string mod
       velocity = 7;
     }
     model->GetJoint((modelName +"::back_left_joint"))->SetParam("fmax", 0, 2.8);
-    model->GetJoint((modelName +"::back_left_joint"))->SetParam("vel", 0, 20 * velocity); // 20 converts m/s input to rad/s that wheels need
+    model->GetJoint((modelName +"::back_left_joint"))->SetParam("vel", 0, 21 * velocity); // 20 converts m/s input to rad/s that wheels need
     model->GetJoint((modelName +"::back_right_joint"))->SetParam("fmax", 0, 2.8);
-    model->GetJoint((modelName +"::back_right_joint"))->SetParam("vel", 0, 20 * velocity);
+    model->GetJoint((modelName +"::back_right_joint"))->SetParam("vel", 0, 21 * velocity);
     model->GetJoint((modelName +"::front_left_joint"))->SetParam("fmax", 1, 2.8);
-    model->GetJoint((modelName +"::front_left_joint"))->SetParam("vel", 0, 20 * velocity);
+    model->GetJoint((modelName +"::front_left_joint"))->SetParam("vel", 0, 21 * velocity);
     model->GetJoint((modelName +"::front_right_joint"))->SetParam("fmax", 1, 2.8);
-    model->GetJoint((modelName +"::front_right_joint"))->SetParam("vel", 0, 20 * velocity);
+    model->GetJoint((modelName +"::front_right_joint"))->SetParam("vel", 0, 21 * velocity);
   }
 void SetSteeringAngle(double angle,gazebo::physics::ModelPtr model,std::string modelName){
   if(isnan(angle)){
